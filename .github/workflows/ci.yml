@@ -16,6 +16,7 @@ on:
       - "ops/production/**"
       - ".env.example"
       - ".github/workflows/ci.yml"
+      - ".github/workflows/deploy-production.yml"
   push:
     branches: [main]
     paths:
@@ -31,6 +32,7 @@ on:
       - "ops/production/**"
       - ".env.example"
       - ".github/workflows/ci.yml"
+      - ".github/workflows/deploy-production.yml"
 
 permissions:
   contents: read
