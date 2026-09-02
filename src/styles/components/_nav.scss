@@ -1,0 +1,6 @@
+@use '../utils/variables' as *;
+@use '../utils/functions' as *;
+@use '../utils/mixins' as *;
+
+// ===== 네비게이션 컴포넌트 =====
+// top-nav는 온보딩 페이지에서 제거되었으므로 필요시 다른 페이지용으로 유지

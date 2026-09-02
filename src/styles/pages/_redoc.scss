@@ -1,0 +1,138 @@
+@use '../utils/variables' as *;
+@use '../utils/functions' as *;
+@use '../utils/mixins' as *;
+
+// ===== Redoc 페이지 스타일 =====
+.redoc-page {
+  html, body, #redoc { 
+    height: 100%; 
+    margin: 0; 
+    padding: 0; 
+  }
+
+  blockquote {
+    border-left: 4px solid $gray-400;
+    padding-left: $spacing-4;
+    margin: $spacing-6 0;
+    color: $gray-600;
+  }
+
+  .floating-controls {
+    position: fixed;
+    top: $spacing-4;
+    right: $spacing-4;
+    z-index: z-index('sticky');
+    background: $white;
+    padding: 0;
+    border-radius: $border-radius-md;
+    box-shadow: shadow-level(3);
+    width: 240px;
+    overflow: hidden;
+    transition: height $transition-speed ease;
+
+    .controls-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: spacing(3) $spacing-4;
+      cursor: pointer;
+      background-color: $gray-50;
+
+      h3 {
+        margin: 0;
+        font-size: $text-sm;
+        color: $gray-700;
+      }
+    }
+
+    #toggle-controls {
+      background: none;
+      border: none;
+      font-size: $text-lg;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .controls-content {
+      padding: $spacing-4;
+      border-top: 1px solid $gray-200;
+
+      &.hidden {
+        display: none;
+      }
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+      color: $primary-color;
+      font-weight: $font-medium;
+      margin-bottom: $spacing-4;
+      padding-bottom: $spacing-4;
+      border-bottom: 1px solid $gray-200;
+      transition: color $transition-speed ease;
+
+      &:hover {
+        color: $primary-dark;
+      }
+    }
+
+    button {
+      width: 100%;
+      padding: spacing(2);
+      font-size: $text-sm;
+      cursor: pointer;
+      border: 1px solid $gray-300;
+      background-color: $gray-50;
+      border-radius: $border-radius;
+      margin-bottom: spacing(2);
+      transition: all $transition-speed ease;
+
+      &:hover {
+        background-color: $gray-100;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        background-color: $gray-200;
+      }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: spacing(2);
+      font-size: $text-sm;
+      color: $gray-700;
+      margin-bottom: spacing(2);
+    }
+
+    #status {
+      font-size: $text-xs;
+      color: $gray-600;
+      font-style: italic;
+    }
+  }
+}
+
+// Toast Notification Styles
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    
+    &.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}

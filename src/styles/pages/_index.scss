@@ -1,0 +1,211 @@
+@use '../utils/variables' as *;
+@use '../utils/functions' as *;
+@use '../utils/mixins' as *;
+
+// ===== 랜딩 페이지 스타일 =====
+.landing-page {
+  min-height: 100vh;
+  background: $primary-gradient;
+  @include flex-center;
+  padding: $spacing-8;
+  overflow-x: hidden;
+
+  .portal-container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+    animation: fadeInUp 0.8s $ease-out-quad;
+  }
+
+  .hero-section {
+    margin-bottom: $spacing-16;
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+    background: alpha($white, 0.2);
+    border-radius: $border-radius-2xl;
+    @include flex-center;
+    margin: 0 auto $spacing-8;
+    @include glassmorphism(0.2, 10px);
+    border: 1px solid alpha($white, 0.3);
+
+    svg {
+      width: 40px;
+      height: 40px;
+      color: $white;
+    }
+  }
+
+  h1 {
+    font-size: fluid-font-size($text-4xl, $text-5xl);
+    font-weight: $font-bold;
+    color: $white;
+    margin-bottom: $spacing-4;
+    text-shadow: 0 2px 4px alpha($black, 0.1);
+  }
+
+  .subtitle {
+    font-size: fluid-font-size($text-lg, $text-xl);
+    color: alpha($white, 0.9);
+    margin-bottom: $spacing-12;
+    font-weight: $font-normal;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: $spacing-8;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .portal-card {
+    background: alpha($white, 0.95);
+    @include glassmorphism(0.95, 20px);
+    border-radius: $border-radius-2xl;
+    padding: $spacing-10;
+    text-decoration: none;
+    color: inherit;
+    transition: all $transition-speed-xl $ease-out-quad;
+    border: 1px solid alpha($white, 0.2);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: $primary-gradient;
+      transform: scaleX(0);
+      transition: transform $transition-speed ease;
+    }
+
+    &:hover::before {
+      transform: scaleX(1);
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: shadow-level(4);
+      background: $white;
+    }
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    background: $primary-gradient;
+    border-radius: $border-radius-xl;
+    @include flex-center;
+    margin: 0 auto $spacing-6;
+    transition: transform $transition-speed ease;
+  }
+
+  .portal-card:hover .card-icon {
+    transform: scale(1.1);
+  }
+
+  .card-icon svg {
+    width: 28px;
+    height: 28px;
+    color: $white;
+  }
+
+  .card-title {
+    font-size: fluid-font-size($text-xl, $text-2xl);
+    font-weight: $font-semibold;
+    color: $gray-900;
+    margin-bottom: $spacing-3;
+  }
+
+  .card-description {
+    font-size: $text-base;
+    color: $gray-700;
+    line-height: 1.6;
+    margin-bottom: $spacing-6;
+  }
+
+  .card-features {
+    list-style: none;
+    text-align: left;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      font-size: $text-sm;
+      color: $gray-700;
+      margin-bottom: $spacing-2;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        color: $success-color;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .particle {
+    position: absolute;
+    background: alpha($white, 0.1);
+    border-radius: $border-radius-full;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .particle:nth-child(1) { width: 20px; height: 20px; top: 20%; left: 10%; animation-delay: 0s; }
+  .particle:nth-child(2) { width: 15px; height: 15px; top: 60%; left: 80%; animation-delay: 2s; }
+  .particle:nth-child(3) { width: 25px; height: 25px; top: 80%; left: 20%; animation-delay: 4s; }
+  .particle:nth-child(4) { width: 18px; height: 18px; top: 30%; left: 70%; animation-delay: 1s; }
+  .particle:nth-child(5) { width: 22px; height: 22px; top: 70%; left: 60%; animation-delay: 3s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY($spacing-8);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @include mobile {
+    h1 {
+      font-size: $text-4xl;
+    }
+    
+    .subtitle {
+      font-size: $text-lg;
+    }
+    
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: $spacing-6;
+    }
+    
+    .portal-card {
+      padding: $spacing-8;
+    }
+  }
+}

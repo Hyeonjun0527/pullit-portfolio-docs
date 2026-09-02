@@ -1,0 +1,247 @@
+@use '../utils/variables' as *;
+
+// 기존 .docs-content와 새로운 .content-card 모두 지원
+.docs-content,
+.content-card {
+  
+  // 표 컨테이너 래퍼 (선택적 사용)
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid $gray-200;
+    
+    @media (max-width: $breakpoint-md) {
+      &::after {
+        content: "← 좌우로 스크롤하여 전체 내용을 확인하세요 →";
+        display: block;
+        text-align: center;
+        font-size: $text-xs;
+        color: $gray-500;
+        padding: $spacing-2;
+        background-color: $gray-50;
+        border-top: 1px solid $gray-200;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background-color: $white;
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+    border: 1px solid $gray-200;
+    font-size: $text-sm;
+    line-height: 1.6;
+
+    th,
+    td {
+      padding: $spacing-3 $spacing-4;
+      text-align: left;
+      border-bottom: 1px solid $gray-200;
+      vertical-align: top;
+      word-wrap: break-word;
+      
+      // 텍스트 정렬 유틸리티
+      &.text-center { text-align: center; }
+      &.text-right { text-align: right; }
+      &.text-nowrap { white-space: nowrap; }
+    }
+
+    thead {
+      background: linear-gradient(135deg, $primary-50 0%, $primary-100 100%);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      th {
+        font-weight: $font-semibold;
+        color: $primary-800;
+        border-bottom: 2px solid $primary-200;
+        font-size: $text-sm;
+        letter-spacing: 0.025em;
+        text-transform: uppercase;
+        
+        &:first-child {
+          padding-left: $spacing-4;
+        }
+        
+        &:last-child {
+          padding-right: $spacing-4;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        transition: all $transition-speed-fast $ease-out-quad;
+        
+        &:nth-child(even) {
+          background-color: rgba($gray-50, 0.5);
+        }
+        
+        &:hover {
+          background-color: $primary-50;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba($primary-600, 0.15);
+        }
+
+        &:last-child {
+          td {
+            border-bottom: none;
+          }
+        }
+      }
+
+      td {
+        color: $gray-800;
+        
+        // 첫 번째 컬럼 강조
+        &:first-child {
+          font-weight: $font-medium;
+          color: $gray-900;
+          background-color: rgba($primary-50, 0.3);
+          border-left: 3px solid $primary-300;
+        }
+
+        // 코드 스타일 개선
+        code {
+          background-color: $primary-100;
+          color: $primary-800;
+          padding: $spacing-1 $spacing-2;
+          border-radius: $border-radius-sm;
+          font-family: $font-mono;
+          font-size: 0.85em;
+          border: 1px solid $primary-200;
+          font-weight: $font-medium;
+        }
+        
+        // 강조 텍스트
+        strong {
+          color: $primary-700;
+          font-weight: $font-semibold;
+        }
+        
+        // 링크 스타일
+        a {
+          color: $primary-600;
+          text-decoration: none;
+          border-bottom: 1px dotted $primary-400;
+          transition: all $transition-speed-fast;
+          
+          &:hover {
+            color: $primary-700;
+            border-bottom-style: solid;
+            background-color: rgba($primary-100, 0.5);
+          }
+        }
+        
+        // 리스트 스타일
+        ul, ol {
+          margin: $spacing-2 0;
+          padding-left: $spacing-4;
+          
+          li {
+            margin-bottom: $spacing-1;
+            color: $gray-700;
+          }
+        }
+      }
+    }
+    
+    // 컴팩트 테이블
+    &.table-compact {
+      th, td {
+        padding: $spacing-2 $spacing-3;
+        font-size: $text-xs;
+      }
+    }
+    
+    // 넓은 테이블
+    &.table-spacious {
+      th, td {
+        padding: $spacing-4 $spacing-6;
+      }
+    }
+    
+    // 스트라이프 테이블
+    &.table-striped {
+      tbody tr:nth-child(odd) {
+        background-color: $white;
+      }
+      
+      tbody tr:nth-child(even) {
+        background-color: $gray-50;
+      }
+    }
+    
+    // 보더리스 테이블
+    &.table-borderless {
+      th, td {
+        border: none;
+      }
+      
+      box-shadow: none;
+      border: none;
+    }
+  }
+  
+  // 반응형 테이블 - 모바일에서 카드 형태로 변환
+  @media (max-width: $breakpoint-md) {
+    .table-responsive {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+      
+      tr {
+        border: 1px solid $gray-200;
+        margin-bottom: $spacing-4;
+        border-radius: $border-radius;
+        padding: $spacing-3;
+        background-color: $white;
+        box-shadow: $shadow-sm;
+      }
+      
+      td {
+        border: none;
+        border-bottom: 1px solid $gray-200;
+        position: relative;
+        padding-left: 35% !important;
+        padding-top: $spacing-2;
+        padding-bottom: $spacing-2;
+        
+        &:before {
+          content: attr(data-label) ": ";
+          position: absolute;
+          left: $spacing-3;
+          width: 30%;
+          padding-right: $spacing-2;
+          white-space: nowrap;
+          font-weight: $font-semibold;
+          color: $primary-700;
+          text-transform: uppercase;
+          font-size: $text-xs;
+        }
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        &:first-child {
+          border-left: none;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}

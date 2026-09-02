@@ -1,0 +1,16 @@
+# Dependencies
+/node_modules
+
+# Environment Variables
+.env
+.env*.local
+
+# Build outputs
+/public/css/main.css.map
+
+# IDE specific
+.vscode/
+.idea/
+
+/src/generated/prisma
+.vercel

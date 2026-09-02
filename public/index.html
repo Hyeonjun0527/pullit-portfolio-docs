@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pullit 온보딩 가이드</title>
+    <link rel="stylesheet" href="/pull-it/docs/css/main.css">
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="module">
+        // 1. Mermaid 코어 라이브러리 임포트
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.esm.min.mjs';
+        
+        // 2. ELK 레이아웃 엔진 임포트
+        import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@latest/dist/mermaid-layout-elk.esm.min.mjs';
+
+        // 3. Mermaid에 ELK 레이아웃 엔진 등록
+        mermaid.registerLayoutLoaders(elkLayouts);
+
+        // 4. Mermaid 초기화 (ELK 옵션 포함)
+        window.mermaid = mermaid;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'default',
+          layout: 'elk',
+          elk: {
+            nodePlacementStrategy: 'LINEAR_SEGMENTS'
+          },
+          er: {
+            layoutDirection: 'TB'
+          }
+        });
+    </script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+    
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/sql.min.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="onboarding-page" v-cloak>
+        <!-- Modern Floating Action Button -->
+        <div class="fab-container">
+            <div class="fab-menu" :class="{ show: isFabExpanded }">
+                <a href="/pull-it/docs/redoc.html" class="fab-item">
+                    <i data-lucide="file-text"></i>
+                    API 문서
+                </a>
+                <a href="/pull-it/docs/" class="fab-item">
+                    <i data-lucide="home"></i>
+                    홈으로
+                </a>
+            </div>
+            <button class="fab-main" :class="{ expanded: isFabExpanded }" @click="toggleFab">
+                <i data-lucide="plus"></i>
+            </button>
+        </div>
+
+        <!-- Page Layout Grid -->
+        <div class="page-layout" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar-nav" :class="{ collapsed: isSidebarCollapsed }">
+                <div class="nav-header">
+                    <h2>Pullit 온보딩 가이드</h2>
+                    <button class="sidebar-toggle" @click="toggleSidebar" :title="isSidebarCollapsed ? '사이드바 펼치기' : '사이드바 접기'">
+                        <i class="chevron-left" data-lucide="chevron-left"></i>
+                        <i class="chevron-right" data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+                <div v-for="menu in navigation" class="nav-section" :key="menu.name">
+                    <button class="nav-section-title" @click="handleSectionClick(menu.name)">
+                        <div class="section-title-content">
+                            <i :data-lucide="menu.icon"></i>
+                            <span>{{ menu.name }}</span>
+                        </div>
+                        <i class="chevron" :data-lucide="isSectionCollapsed(menu.name) ? 'chevron-right' : 'chevron-down'"></i>
+                    </button>
+                    <div class="nav-section-icon" :title="menu.name">
+                        <i :data-lucide="menu.icon"></i>
+                    </div>
+                    <div class="nav-items" :class="{ collapsed: isSectionCollapsed(menu.name) }">
+                        <a v-for="item in menu.items" 
+                           :key="item.id"
+                           :href="'#' + item.id" 
+                           class="nav-item"
+                           :class="{ active: activeSection === item.id }"
+                           @click.prevent="showSection(item.id)">
+                            <i :data-lucide="item.icon"></i>
+                            <span>{{ item.title }}</span>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+                <div class="content-container">
+                    <section v-for="(section, id) in sections" :key="id" :id="id" class="content-section" :class="{ active: activeSection === id }">
+                        <div class="content-card"
+                             :class="{ 'is-dragging': isDragging[id] }"
+                             @dragenter.prevent="isDragging[id] = true"
+                             @dragover.prevent
+                             @dragleave.prevent="isDragging[id] = false"
+                             @drop.prevent="handleFileDropAndImport(id, $event)">
+                            <div class="card-header">
+                                <h3>{{ section.title }}</h3>
+                                <div class="card-actions" v-if="!isEditing[id] && section.markdown">
+                                        <button @click="importMarkdown(id)" class="action-btn import-btn" title="파일 가져오기">
+                                            <i data-lucide="upload"></i>
+                                            <span>Import</span>
+                                        </button>
+                                        <button @click="startEditing(id)" class="action-btn edit-btn" title="수정하기">
+                                            <i data-lucide="edit-3"></i>
+                                            <span>수정</span>
+                                        </button>
+                                        <button @click="exportMarkdown(id)" class="action-btn export-btn" title="Markdown으로 내보내기">
+                                            <i data-lucide="download"></i>
+                                            <span>내보내기</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            <div v-if="!isEditing[id]">
+                                <div v-if="section.markdown" v-html="renderMarkdown(section.markdown)"></div>
+                                <div v-else-if="section.html" v-html="section.html"></div>
+                            </div>
+
+                            <div v-if="isEditing[id]" class="editing-container">
+                                <div class="editor-header">
+                                    <h4>{{ section.title }} 수정하기</h4>
+                                    <div class="editor-actions">
+                                        <button @click="saveContent(id)" class="modern-btn save-btn">
+                                            <i data-lucide="check"></i>
+                                            <span>저장</span>
+                                        </button>
+                                        <button @click="cancelEditing(id)" class="modern-btn cancel-btn">
+                                            <i data-lucide="x"></i>
+                                            <span>취소</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="editor-layout">
+                                    <div class="editor-pane">
+                                        <textarea v-model="editingContent[id]" class="markdown-editor" placeholder="여기에 Markdown 내용을 입력하거나 파일을 드래그 앤 드롭하세요..."></textarea>
+                                    </div>
+                                    <div class="preview-pane">
+                                        <div class="preview-content" v-html="renderMarkdown(editingContent[id])"></div>
+                                    </div>
+                                </div>
+                                <div class="editor-footer">
+                                    <div class="editor-tips">
+                                        <i data-lucide="info"></i>
+                                        <span>Markdown 문법을 사용할 수 있습니다. 실시간 미리보기는 저장 후 확인 가능합니다.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <!-- Mobile Navigation Toggle -->
+        <button class="mobile-nav-toggle" @click="toggleMobileSidebar">
+            <i data-lucide="menu"></i>
+        </button>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div class="mobile-sidebar-overlay" :class="{ show: isMobileSidebarOpen }" @click="closeMobileSidebar"></div>
+        
+        <!-- Mobile Sidebar -->
+        <aside class="mobile-sidebar" :class="{ show: isMobileSidebarOpen }">
+            <div class="nav-header">
+                <h2>Pullit 온보딩 가이드</h2>
+            </div>
+            <div v-for="menu in navigation" class="nav-section" :key="menu.name">
+                <h4 class="nav-section-title">
+                    <i :data-lucide="menu.icon"></i>
+                    {{ menu.name }}
+                </h4>
+                <a v-for="item in menu.items" 
+                   :key="item.id"
+                   :href="'#' + item.id" 
+                   class="nav-item"
+                   :class="{ active: activeSection === item.id }"
+                   @click.prevent="showSection(item.id); closeMobileSidebar()">
+                    <i :data-lucide="item.icon"></i>
+                    {{ item.title }}
+                </a>
+            </div>
+        </aside>
+
+        <!-- Authentication Modal -->
+        <div v-if="showAuthModal" class="modal-overlay" @click="closeAuthModal">
+            <div class="auth-modal" @click.stop>
+                <div class="modal-header">
+                    <h3>인증이 필요합니다</h3>
+                    <button @click="closeAuthModal" class="close-btn">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>편집 기능을 사용하려면 비밀키를 입력해주세요.</p>
+                    <div class="input-group">
+                        <input 
+                            type="password" 
+                            v-model="authPassword" 
+                            placeholder="비밀키를 입력하세요"
+                            @keyup.enter="authenticate"
+                            class="auth-input"
+                        >
+                        <button @click="authenticate" class="auth-btn">
+                            <i data-lucide="unlock"></i>
+                            인증
+                        </button>
+                    </div>
+                    <div v-if="authError" class="auth-error">
+                        <i data-lucide="alert-circle"></i>
+                        {{ authError }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="/pull-it/docs/js/runtime-config.js"></script>
+    <script src="/pull-it/docs/js/onboarding.js" defer></script>
+</body>
+</html>

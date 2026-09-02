@@ -1,0 +1,181 @@
+@use '../utils/variables' as *;
+@use '../utils/functions' as *;
+@use '../utils/mixins' as *;
+
+// ===== 기본 카드 스타일 =====
+.card {
+  @include card-base;
+  padding: $spacing-8;
+  margin-bottom: $spacing-8;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  h3 {
+    @include heading-3;
+    color: $gray-900;
+    margin-bottom: $spacing-6;
+    padding-bottom: $spacing-2;
+    border-bottom: 2px solid $gray-200;
+  }
+
+  h4 {
+    @include heading-3;
+    font-size: $text-xl;
+    margin-top: $spacing-8;
+    margin-bottom: $spacing-4;
+    color: $gray-700;
+  }
+
+  p, li {
+    color: $gray-700;
+    line-height: 1.7;
+  }
+
+  code {
+    background-color: $gray-100;
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    border-radius: $border-radius-sm;
+    font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+    color: $gray-800;
+  }
+
+  pre {
+    background-color: $gray-900;
+    color: $gray-100;
+    padding: $spacing-4;
+    border-radius: $border-radius;
+    overflow-x: auto;
+    margin: $spacing-4 0;
+    @include custom-scrollbar;
+
+    code {
+      background-color: transparent;
+      padding: 0;
+      color: inherit;
+    }
+  }
+
+  blockquote {
+    border-left: 4px solid $gray-400;
+    padding-left: $spacing-4;
+    margin: $spacing-6 0;
+    color: $gray-600;
+    font-style: italic;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: $spacing-6 0;
+
+    th, td {
+      border: 1px solid $gray-200;
+      padding: $spacing-3;
+      text-align: left;
+    }
+
+    th {
+      background-color: $gray-50;
+      font-weight: $font-semibold;
+    }
+  }
+}
+
+// ===== 포털 카드 (랜딩 페이지용) =====
+.portal-card {
+  @include card-glassmorphism;
+  padding: $spacing-10;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    @include gradient-primary;
+    transform: scaleX(0);
+    transition: transform $transition-speed-lg;
+  }
+
+  &:hover {
+    &::before {
+      transform: scaleX(1);
+    }
+
+    transform: translateY(-8px);
+    box-shadow: $shadow-2xl;
+    background: $white;
+
+    .card-icon {
+      @include hover-scale(1.1);
+    }
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    @include gradient-primary;
+    border-radius: $border-radius-xl;
+    @include flex-center;
+    margin: 0 auto $spacing-6;
+    transition: transform $transition-speed-lg;
+
+    svg {
+      width: 28px;
+      height: 28px;
+      color: $white;
+    }
+  }
+
+  .card-title {
+    @include heading-3;
+    color: $gray-900;
+    margin-bottom: $spacing-3;
+  }
+
+  .card-description {
+    font-size: $text-base;
+    color: $gray-600;
+    line-height: 1.6;
+    margin-bottom: $spacing-6;
+  }
+
+  .card-features {
+    list-style: none;
+    text-align: left;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      font-size: $text-sm;
+      color: $gray-600;
+      margin-bottom: $spacing-2;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        color: $success-color;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// ===== 카드 그리드 =====
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: $spacing-8;
+  max-width: 800px;
+  margin: 0 auto;
+}

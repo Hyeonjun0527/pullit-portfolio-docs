@@ -1,0 +1,37 @@
+{
+  "name": "pullit-docs-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-db": "node scripts/check-db.js",
+    "start": "node api/index.js",
+    "check-diff": "node scripts/check-diff.js",
+    "diff:to-db": "node scripts/sync-to-db.js",
+    "diff:from-db": "node scripts/sync-from-db.js",
+    "build:css": "sass src/styles/main.scss public/css/main.css",
+    "watch:css": "sass --watch src/styles/main.scss:public/css/main.css",
+    "build": "npm run build:css && prisma generate",
+    "build:css:prod": "sass src/styles/main.scss public/css/main.css --style compressed"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "glob": "^11.0.3",
+    "prisma": "^6.19.0",
+    "sass": "^1.93.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "diff": "^8.0.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}

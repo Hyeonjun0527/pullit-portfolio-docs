@@ -1,0 +1,134 @@
+// ===== 색상 시스템 =====
+// 파스텔 초록 색상 팔레트
+$primary-color: #16a34a;        // 메인 색상 (기존 $primary-600)
+$primary-light: #22c55e;       // 밝은 톤 (기존 $primary-500)
+$primary-dark: #15803d;        // 어두운 톤 (기존 $primary-700)
+$primary-50: #f0fdf4;          // 매우 연한 초록
+$primary-100: #dcfce7;         // 연한 초록
+$primary-200: #bbf7d0;         // 밝은 초록
+$primary-300: #86efac;         // 중간 밝은 초록
+$primary-400: #4ade80;         // 중간 초록
+$primary-500: #22c55e;         // 표준 초록
+$primary-600: #16a34a;         // 진한 초록
+$primary-700: #15803d;         // 더 진한 초록
+$primary-800: #166534;         // 매우 진한 초록
+$primary-900: #14532d;         // 가장 진한 초록
+
+// 그라디언트
+$primary-gradient: linear-gradient(135deg, #{$primary-light} 0%, #{$primary-color} 100%);
+$secondary-gradient: linear-gradient(135deg, #{$primary-color} 0%, #{$primary-light} 100%);
+
+// 보조 색상
+$accent-color: $primary-color;
+
+// Neutral Colors
+$white: #ffffff;
+$black: #000000;
+$gray-50: #f8fafc;
+$gray-100: #f1f5f9;
+$gray-200: #e2e8f0;
+$gray-300: #cbd5e1;
+$gray-400: #94a3b8;
+$gray-500: #64748b;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1e293b;
+$gray-900: #0f172a;
+
+// Semantic Colors
+$success-color: $primary-color;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+$info-color: $primary-color;
+
+// ===== 타이포그래피 =====
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+// Font Sizes
+$text-xs: 0.75rem;    // 12px
+$text-sm: 0.875rem;   // 14px
+$text-base: 1rem;     // 16px
+$text-lg: 1.125rem;   // 18px
+$text-xl: 1.25rem;    // 20px
+$text-2xl: 1.5rem;    // 24px
+$text-3xl: 1.875rem;  // 30px
+$text-4xl: 2.25rem;   // 36px
+$text-5xl: 3rem;      // 48px
+$text-6xl: 3.75rem;   // 60px
+
+// Font Weights
+$font-light: 300;
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
+// ===== 간격 시스템 =====
+$spacing-0: 0;
+$spacing-1: 0.25rem;  // 4px
+$spacing-2: 0.5rem;   // 8px
+$spacing-3: 0.75rem;  // 12px
+$spacing-4: 1rem;     // 16px
+$spacing-5: 1.25rem;  // 20px
+$spacing-6: 1.5rem;   // 24px
+$spacing-8: 2rem;     // 32px
+$spacing-10: 2.5rem;  // 40px
+$spacing-12: 3rem;    // 48px
+$spacing-16: 4rem;    // 64px
+$spacing-20: 5rem;    // 80px
+$spacing-24: 6rem;    // 96px
+
+// ===== 레이아웃 =====
+$container-max-width: 1200px;
+$border-radius-sm: 0.375rem;  // 6px
+$border-radius: 0.5rem;       // 8px
+$border-radius-md: 0.75rem;   // 12px
+$border-radius-lg: 1rem;      // 16px
+$border-radius-xl: 1.25rem;   // 20px
+$border-radius-2xl: 1.5rem;   // 24px
+
+// ===== 그림자 =====
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+// ===== 트랜지션 =====
+$transition-speed: 0.2s;
+$transition-speed-fast: 0.15s;
+$transition-speed-lg: 0.3s;
+$transition-speed-xl: 0.4s;
+
+// Easing Functions
+$ease-out-quad: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-in-out-cubic: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-out-cubic: cubic-bezier(0, 0, 0.2, 1);
+$ease-in-cubic: cubic-bezier(0.4, 0, 1, 1);
+
+// ===== 컴포넌트별 변수 =====
+// Navigation
+$navbar-height: 4rem;
+
+// Border Radius
+$border-radius-full: 50%;
+
+// Font Family
+$font-mono: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+
+// ===== Z-Index =====
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
+
+// ===== 브레이크포인트 =====
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;

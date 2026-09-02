@@ -1,0 +1,102 @@
+[
+    {
+        "name": "개요",
+        "icon": "rocket",
+        "category": "overview",
+        "items": [
+            { "id": "01-introduction", "title": "1. 문서 개요", "icon": "book-open" },
+            { "id": "02-philosophy", "title": "2. 개발 철학", "icon": "lightbulb" },
+            { "id": "03-team-resources", "title": "3. 팀 리소스", "icon": "users" },
+            { "id": "maintainers", "title": "4. Maintainers", "icon": "shield" }
+        ]
+    },
+    {
+        "name": "온보딩 가이드",
+        "icon": "graduation-cap",
+        "category": "onboarding-guide",
+        "items": [
+            { "id": "01-Ground-Rules", "title": "1. 그라운드 룰", "icon": "handshake" },
+            { "id": "02-Scrum&Metting-Rules", "title": "2. 스크럼 및 회의 규칙", "icon": "calendar" },
+            { "id": "03-Documentation", "title": "3. 문서화 규칙", "icon": "file-text" },
+            { "id": "04-Insomnia", "title": "4. API 호출 가이드", "icon": "send" }
+        ]
+    },
+    {
+        "name": "개발 프로세스",
+        "icon": "settings",
+        "category": "development-process",
+        "items": [
+            { "id": "01-git-convention", "title": "1. Git 컨벤션", "icon": "git-branch" },
+            { "id": "02-api-design", "title": "2. API 설계", "icon": "code" },
+            { "id": "03-local-development-setup", "title": "3. 로컬 개발 환경 구성", "icon": "laptop" }
+        ]
+    },
+    {
+        "name": "백엔드 문서",
+        "icon": "server",
+        "category": "backend",
+        "items": [
+            { "id": "01-architecture", "title": "1. 아키텍처", "icon": "layout-grid" },
+            { "id": "02-erd", "title": "2. ERD", "icon": "database" },
+            { "id": "03-database-schema", "title": "3. 상세 스키마", "icon": "table" },
+            { "id": "04-Gemini", "title": "4. Gemini 연동 가이드", "icon": "cpu" },
+            { "id": "05-scheduler-guide", "title": "5. 스케줄러 가이드", "icon": "clock" },
+            { "id": "06-test-guide", "title": "6. 테스트 가이드", "icon": "beaker" },
+            { "id": "07-event-architecture", "title": "7. 이벤트 아키텍처", "icon": "zap" }
+        ]
+    },
+    {
+        "name": "프론트 문서",
+        "icon": "laptop",
+        "category": "frontend",
+        "items": [
+            { "id": "00-introduction", "title": "1. 소개", "icon": "file-text" },
+            { "id": "01-logo-and-style", "title": "2. 로고와 스타일", "icon": "palette" },
+            { "id": "02-tech-stack", "title": "3. 기술 스택", "icon": "layers" },
+            { "id": "02-1-tech-stack-decision", "title": "4. 기술 스택 선정 근거", "icon": "check-square" },
+            { "id": "05-Git-Rules", "title": "5. Git 규칙", "icon": "git-branch" },
+            { "id": "06-Directory-Structure", "title": "6. 디렉터리 구조", "icon": "folder-tree" },
+            { "id": "03-cicd", "title": "7. CI/CD", "icon": "git-pull-request" },
+            { "id": "04-initial-setup", "title": "8. 초기 세팅", "icon": "settings-2" },
+            { "id": "08-api-calls", "title": "9. API 호출과 설정", "icon": "arrow-left-right" },
+            { "id": "09-file-upload", "title": "10. 파일 업로드", "icon": "upload-cloud" },
+            { "id": "10-sse-connection", "title": "11. SSE 연결", "icon": "wifi" },
+            { "id": "07-pr-guide", "title": "12. PR 가이드", "icon": "git-merge" }
+        ]
+    },
+    {
+        "name": "배포 프로세스",
+        "icon": "upload",
+        "category": "deployment-process",
+        "items": [
+            { "id": "01-deploy-overview", "title": "1. 배포 개요", "icon": "info" },
+            { "id": "02-deploy-ec2-setup", "title": "2. EC2 서버 설정", "icon": "server" },
+            { "id": "03-deploy-docker-build", "title": "3. Docker 빌드 전략", "icon": "package" },
+            { "id": "04-deploy-docker-compose", "title": "4. EC2 컨테이너 실행", "icon": "play" },
+            { "id": "05-deploy-nginx", "title": "5. Nginx 리버스 프록시", "icon": "shield" },
+            { "id": "06-deploy-https", "title": "6. HTTPS 적용", "icon": "lock" },
+            { "id": "07-deploy-dns", "title": "7. DNS 및 도메인 연결", "icon": "globe" },
+            { "id": "08-blue-green-deployment", "title": "8. 무중단 배포", "icon": "refresh-cw" },
+            { "id": "09-continuous-integration", "title": "9. CI (Github Actions)", "icon": "git-pull-request" },
+            { "id": "10-continuous-deployment", "title": "10. CD (Github Actions)", "icon": "rocket" },
+            { "id": "11-local-compose-setup", "title": "11. 로컬 환경 (Compose)", "icon": "cpu" }
+        ]
+    },
+    {
+        "name": "기술 표준",
+        "icon": "file-text",
+        "category": "technical-standards",
+        "items": [
+            { "id": "01-environment-setup", "title": "1. 개발 환경 설정", "icon": "monitor" },
+            { "id": "02-code-convention", "title": "2. 코딩 컨벤션", "icon": "code-2" }
+        ]
+    },
+    {
+        "name": "임시 테스트",
+        "icon": "edit-3",
+        "category": "temporary",
+        "items": [
+            { "id": "01-editable-test", "title": "1. 문서 편집 테스트", "icon": "file-text" }
+        ]
+    }
+]

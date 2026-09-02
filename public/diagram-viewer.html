@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagram Viewer</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            overflow: hidden;
+        }
+        #diagram-container {
+            width: 95%;
+            height: 95%;
+            overflow: auto;
+            cursor: grab;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: grid;
+            place-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="diagram-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const diagramContainer = document.getElementById('diagram-container');
+            const svgContent = sessionStorage.getItem('mermaidSVG');
+
+            if (svgContent) {
+                diagramContainer.innerHTML = svgContent;
+
+                const svg = diagramContainer.querySelector('svg');
+                if (svg) {
+                    const viewBox = svg.getAttribute('viewBox');
+                    let initialWidth, initialHeight;
+
+                    if (viewBox) {
+                        const parts = viewBox.split(' ');
+                        initialWidth = parseFloat(parts[2]);
+                        initialHeight = parseFloat(parts[3]);
+                    } else {
+                        const rect = svg.getBoundingClientRect();
+                        initialWidth = rect.width;
+                        initialHeight = rect.height;
+                    }
+
+                    svg.removeAttribute('width');
+                    svg.removeAttribute('height');
+                    svg.style.width = `${initialWidth}px`;
+                    svg.style.height = `${initialHeight}px`;
+
+                    let isPanning = false;
+                    let startPoint = { x: 0, y: 0 };
+                    let scale = 1;
+
+                    diagramContainer.addEventListener('mousedown', (e) => {
+                        isPanning = true;
+                        diagramContainer.style.cursor = 'grabbing';
+                        startPoint = { x: e.clientX, y: e.clientY };
+                        e.preventDefault();
+                    });
+
+                    diagramContainer.addEventListener('mousemove', (e) => {
+                        if (!isPanning) return;
+                        const endPoint = { x: e.clientX, y: e.clientY };
+                        diagramContainer.scrollLeft -= (endPoint.x - startPoint.x);
+                        diagramContainer.scrollTop -= (endPoint.y - startPoint.y);
+                        startPoint = endPoint;
+                    });
+
+                    const stopPanning = () => {
+                        isPanning = false;
+                        diagramContainer.style.cursor = 'grab';
+                    };
+                    diagramContainer.addEventListener('mouseup', stopPanning);
+                    diagramContainer.addEventListener('mouseleave', stopPanning);
+
+                    diagramContainer.addEventListener('wheel', (e) => {
+                        e.preventDefault();
+
+                        const rect = diagramContainer.getBoundingClientRect();
+                        const mouseX = e.clientX - rect.left;
+                        const mouseY = e.clientY - rect.top;
+
+                        const scrollX = diagramContainer.scrollLeft;
+                        const scrollY = diagramContainer.scrollTop;
+
+                        const oldScale = scale;
+                        const scaleAmount = 0.1;
+
+                        if (e.deltaY < 0) {
+                            scale *= (1 + scaleAmount);
+                        } else {
+                            scale *= (1 - scaleAmount);
+                        }
+                        scale = Math.max(0.1, scale);
+
+                        svg.style.width = `${initialWidth * scale}px`;
+                        svg.style.height = `${initialHeight * scale}px`;
+
+                        const newScrollX = (scrollX + mouseX) * (scale / oldScale) - mouseX;
+                        const newScrollY = (scrollY + mouseY) * (scale / oldScale) - mouseY;
+
+                        diagramContainer.scrollLeft = newScrollX;
+                        diagramContainer.scrollTop = newScrollY;
+                    });
+                }
+            } else {
+                diagramContainer.innerHTML = '<p>표시할 다이어그램이 없습니다.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

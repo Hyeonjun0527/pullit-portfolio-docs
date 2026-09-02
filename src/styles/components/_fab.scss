@@ -1,0 +1,123 @@
+@use '../utils/variables' as *;
+@use '../utils/functions' as *;
+@use '../utils/mixins' as *;
+
+// ===== Floating Action Button =====
+.fab-container {
+  position: fixed;
+  bottom: $spacing-6;
+  right: $spacing-6;
+  z-index: z-index('fixed');
+}
+
+.fab-main {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  @include gradient-primary;
+  border: none;
+  box-shadow: shadow-level(4);
+  cursor: pointer;
+  @include flex-center;
+  color: $white;
+  transition: all $transition-speed-lg $ease-out-quad;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: shadow-level(5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &.expanded {
+    @include gradient-secondary;
+    transform: rotate(45deg);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.fab-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY($spacing-5);
+  transition: all $transition-speed-lg $ease-out-quad;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.fab-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  background: $white;
+  padding: $spacing-3 $spacing-4;
+  border-radius: 28px;
+  box-shadow: shadow-level(3);
+  text-decoration: none;
+  color: $gray-700;
+  font-weight: $font-medium;
+  font-size: $text-sm;
+  white-space: nowrap;
+  transition: all $transition-speed ease;
+  border: 1px solid alpha($gray-200, 0.5);
+
+  &:hover {
+    transform: translateX(-4px);
+    box-shadow: shadow-level(4);
+    color: $primary-color;
+  }
+
+  &.active {
+    @include gradient-primary;
+    color: $white;
+    border-color: $primary-color;
+    box-shadow: shadow-level(4);
+    
+    svg {
+      color: $white;
+    }
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+// Media query for mobile devices
+@media (max-width: 768px) {
+  .fab-container {
+    right: auto;
+    left: $spacing-8;
+    bottom: $spacing-12;
+  }
+
+  .fab-menu {
+    right: auto;
+    left: 0;
+  }
+
+  .fab-item {
+    &:hover {
+      transform: translateX(4px);
+    }
+  }
+}

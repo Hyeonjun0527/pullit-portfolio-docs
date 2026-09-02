@@ -1,0 +1,42 @@
+services:
+  pullit-docs-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pullit_docs
+      POSTGRES_USER: pullit_docs
+      POSTGRES_PASSWORD: ${PULLIT_DOCS_DB_PASSWORD:?PULLIT_DOCS_DB_PASSWORD is required}
+    volumes: ["pullit-portfolio-docs-db-data:/var/lib/postgresql/data"]
+    networks: [pullit-docs-internal]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U pullit_docs -d pullit_docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  pullit-docs:
+    image: ${PULLIT_DOCS_IMAGE:?PULLIT_DOCS_IMAGE is required}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql://pullit_docs:${PULLIT_DOCS_DB_PASSWORD:?PULLIT_DOCS_DB_PASSWORD is required}@pullit-docs-db:5432/pullit_docs?schema=public"
+    depends_on:
+      pullit-docs-db: {condition: service_healthy}
+    networks:
+      pullit-docs-internal:
+      yeon-edge:
+        aliases: [pullit-docs]
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://localhost:3000/healthz').then(response => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  pullit-portfolio-docs-db-data: {name: pullit-portfolio-docs-db-data}
+
+networks:
+  pullit-docs-internal: {name: pullit-portfolio-docs-internal}
+  yeon-edge:
+    external: true
