@@ -35,7 +35,7 @@ jobs:
   transport-preflight:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: pullit-docs-production
+    environment: pullit-portfolio-docs-production
     steps:
       - uses: actions/checkout@v5
         with:
@@ -59,7 +59,9 @@ jobs:
             --output /dev/null --write-out '%{http_code}' \
             --header "CF-Access-Client-Id: $PULLIT_CLOUDFLARE_ACCESS_CLIENT_ID" \
             --header "CF-Access-Client-Secret: $PULLIT_CLOUDFLARE_ACCESS_CLIENT_SECRET" "https://$DEPLOY_HOST")"
-          test "$status" = 200 || { echo "Cloudflare Access service-token probe returned HTTP $status" >&2; exit 1; }
+          # SSH tunnel probes can be answered as 200 by the Cloudflare edge or
+          # 530 by the SSH origin. Access denial is a login/authorization response.
+          case "$status" in 200|530) ;; *) echo "Cloudflare Access service-token probe returned HTTP $status; expected 200 or 530" >&2; exit 1 ;; esac
           install -d -m 700 ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
@@ -95,7 +97,7 @@ jobs:
           context: .
           platforms: linux/arm64
           push: true
-          tags: ghcr.io/hyeonjun0527/pullit-docs-server:${{ github.sha }}
+          tags: ghcr.io/hyeonjun0527/pullit-portfolio-docs:${{ github.sha }}
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
 
   deploy:
@@ -103,7 +105,7 @@ jobs:
     if: github.event_name == 'push' || inputs.operation == 'deploy'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: pullit-docs-production
+    environment: pullit-portfolio-docs-production
     steps:
       - uses: actions/checkout@v5
         with:
@@ -114,9 +116,11 @@ jobs:
           DEPLOY_KEY: ${{ secrets.PULLIT_DEPLOY_SSH_PRIVATE_KEY }}
           KNOWN_HOSTS: ${{ vars.PULLIT_DEPLOY_SSH_KNOWN_HOSTS }}
           DEPLOY_HOST: ${{ vars.PULLIT_DEPLOY_HOST }}
+          PULLIT_CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.PULLIT_CLOUDFLARE_ACCESS_CLIENT_ID }}
+          PULLIT_CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.PULLIT_CLOUDFLARE_ACCESS_CLIENT_SECRET }}
         run: |
           set -euo pipefail
-          test -n "$DEPLOY_KEY" && test -n "$KNOWN_HOSTS" && test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_KEY" && test -n "$KNOWN_HOSTS" && test -n "$DEPLOY_HOST" && test -n "$PULLIT_CLOUDFLARE_ACCESS_CLIENT_ID" && test -n "$PULLIT_CLOUDFLARE_ACCESS_CLIENT_SECRET"
           install -d -m 700 ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
@@ -128,7 +132,7 @@ jobs:
           chmod 600 ~/.ssh/config
       - name: Upload only this revision's docs contract
         env:
-          PULLIT_DOCS_IMAGE: ghcr.io/hyeonjun0527/pullit-docs-server:${{ github.sha }}
+          PULLIT_DOCS_IMAGE: ghcr.io/hyeonjun0527/pullit-portfolio-docs:${{ github.sha }}
           PULLIT_DOCS_DB_PASSWORD: ${{ secrets.PULLIT_DOCS_DB_PASSWORD }}
           DEPLOY_HOST: ${{ vars.PULLIT_DEPLOY_HOST }}
           PULLIT_CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.PULLIT_CLOUDFLARE_ACCESS_CLIENT_ID }}
