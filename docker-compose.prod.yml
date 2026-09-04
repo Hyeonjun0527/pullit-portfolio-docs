@@ -17,14 +17,13 @@ services:
   pullit-docs:
     image: ${PULLIT_DOCS_IMAGE:?PULLIT_DOCS_IMAGE is required}
     restart: unless-stopped
+    ports:
+      - "10.77.0.40:18083:3000"
     environment:
       DATABASE_URL: "postgresql://pullit_docs:${PULLIT_DOCS_DB_PASSWORD:?PULLIT_DOCS_DB_PASSWORD is required}@pullit-docs-db:5432/pullit_docs?schema=public"
     depends_on:
       pullit-docs-db: {condition: service_healthy}
-    networks:
-      pullit-docs-internal:
-      yeon-edge:
-        aliases: [pullit-docs]
+    networks: [pullit-docs-internal]
     security_opt: ["no-new-privileges:true"]
     healthcheck:
       test: [CMD, node, -e, "fetch('http://localhost:3000/healthz').then(response => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
@@ -38,5 +37,3 @@ volumes:
 
 networks:
   pullit-docs-internal: {name: pullit-portfolio-docs-internal}
-  yeon-edge:
-    external: true

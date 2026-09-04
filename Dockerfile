@@ -6,7 +6,9 @@ RUN apt-get update \
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN npm run build:css:prod && npx prisma generate
+RUN npm run build:css:prod \
+  && npx prisma generate \
+  && npm prune --omit=dev
 
 FROM node:22-bookworm-slim
 WORKDIR /app
