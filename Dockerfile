@@ -13,11 +13,14 @@ RUN npm run build:css:prod \
 FROM node:22-bookworm-slim
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/api ./api
-COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/public ./public
-COPY --from=build /app/package.json ./package.json
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl \
+  && rm -rf /var/lib/apt/lists/*
+COPY --chown=node:node --from=build /app/node_modules ./node_modules
+COPY --chown=node:node --from=build /app/api ./api
+COPY --chown=node:node --from=build /app/prisma ./prisma
+COPY --chown=node:node --from=build /app/public ./public
+COPY --chown=node:node --from=build /app/package.json ./package.json
 USER node
 EXPOSE 3000
 CMD ["node", "api/index.js"]
