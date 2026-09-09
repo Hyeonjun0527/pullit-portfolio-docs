@@ -16,20 +16,21 @@ const prisma = new PrismaClient();
 const app = express();
 
 app.use((req, res, next) => {
-    const docsBasePath = '/pull-it/docs';
-    if (req.url === docsBasePath) {
-        req.url = '/';
-    } else if (req.url.startsWith(`${docsBasePath}/`)) {
-        req.url = req.url.slice(docsBasePath.length);
+    const docsBasePath = ['/pull-it-docs', '/pull-it/docs'].find(
+        prefix => req.path === prefix || req.path.startsWith(`${prefix}/`)
+    );
+    if (docsBasePath) {
+        req.url = req.url.slice(docsBasePath.length) || '/';
+        if (req.url.startsWith('?')) req.url = `/${req.url}`;
     }
     next();
 });
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '..', 'public'), { index: 'landing.html' }));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'landing.html'));
 });
 
 app.get('/healthz', (req, res) => {
