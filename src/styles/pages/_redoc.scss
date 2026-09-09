@@ -3,6 +3,11 @@
 @use '../utils/mixins' as *;
 
 // ===== Redoc 페이지 스타일 =====
+// Redoc의 연속 스크롤 명령이 전역 smooth 설정으로 서로 취소되지 않게 한다.
+html.redoc-root {
+  scroll-behavior: auto;
+}
+
 .redoc-page {
   html, body, #redoc { 
     height: 100%; 
