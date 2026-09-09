@@ -53,6 +53,35 @@
     font-weight: $font-normal;
   }
 
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    min-height: 44px;
+    padding: $spacing-3 $spacing-5;
+    border: 1px solid alpha($white, 0.6);
+    border-radius: $border-radius-lg;
+    background: $white;
+    color: $gray-900;
+    font-weight: $font-semibold;
+    text-decoration: none;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: $gray-100;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $white;
+      outline-offset: 4px;
+    }
+  }
+
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));

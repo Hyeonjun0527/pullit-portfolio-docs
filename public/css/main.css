@@ -93,7 +93,7 @@
   border-radius: 0.5rem;
 }
 .card pre::-webkit-scrollbar-thumb:hover {
-  background: rgb(117.3426966292, 136.6404494382, 163.6573033708);
+  background: rgb(46.0167437762%, 53.5844899758%, 64.1793346552%);
 }
 .card pre code {
   background-color: transparent;
@@ -621,6 +621,31 @@
   margin-bottom: 3rem;
   font-weight: 400;
 }
+.landing-page .service-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 1rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  text-decoration: none;
+}
+.landing-page .service-link svg {
+  width: 20px;
+  height: 20px;
+}
+.landing-page .service-link:hover {
+  background: #f1f5f9;
+}
+.landing-page .service-link:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 4px;
+}
 .landing-page .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1097,7 +1122,7 @@
   transform: translateY(-4px) scale(1.01);
   box-shadow: 0 12px 40px rgba(59, 130, 246, 0.25);
   border-color: #16a34a;
-  background: rgb(157.3762162162, 241.8237837838, 188.52);
+  background: rgb(61.716163222%, 94.8328563858%, 73.9294117647%);
 }
 .onboarding-page .content-card.is-dragging > * {
   pointer-events: none;
@@ -1973,6 +1998,10 @@
     transform: translateY(0) scale(1);
   }
 }
+html.redoc-root {
+  scroll-behavior: auto;
+}
+
 .redoc-page html, .redoc-page body, .redoc-page #redoc {
   height: 100%;
   margin: 0;
