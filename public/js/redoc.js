@@ -62,25 +62,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // 초기 로드는 Redoc.init을 직접 호출합니다.
     async function initialLoad() {
         showToast('문서 로딩 중...');
+        const redocContainer = document.getElementById('redoc');
+        if (!redocContainer) return;
+        let specification;
 
         try {
-            const response = await fetch(SPEC_URL);
+            if (typeof Redoc === 'undefined') {
+                throw new Error('API 문서 뷰어를 불러오지 못했습니다.');
+            }
+            const response = await fetch(SPEC_URL, { redirect: 'error' });
             if (!response.ok) {
                 throw new Error(`API 명세 로드 실패: ${response.statusText}`);
+            }
+            specification = await response.json();
+            if (!specification.openapi && !specification.swagger) {
+                throw new Error('올바른 OpenAPI 명세가 아닙니다.');
             }
             currentETag = response.headers.get('ETag');
             console.log(`초기 ETag: ${currentETag}`);
         } catch (error) {
             console.error(error);
-            showToast('문서 로드 실패');
+            redocContainer.textContent = 'API 문서를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
+            redocContainer.setAttribute('role', 'alert');
+            showToast('API 명세를 불러오지 못했습니다.');
             return;
         }
 
-        const redocContainer = document.getElementById('redoc');
-        if (!redocContainer) return;
-        
         Redoc.init(
-            SPEC_URL,
+            specification,
             {
                 scrollYOffset: 50,
                 theme: {
@@ -94,7 +103,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
             },
             redocContainer,
-            () => { // Callback on success
+            (error) => {
+                if (error) {
+                    console.error('API 문서 렌더링 실패:', error);
+                    showToast('API 문서를 표시하지 못했습니다.');
+                    return;
+                }
                 const now = new Date();
                 showToast(`갱신 완료 (${now.toLocaleTimeString()})`);
                 

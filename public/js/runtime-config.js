@@ -1,5 +1,5 @@
 (function configurePullitDocsRuntime(global) {
-    const basePath = '/pull-it/docs';
+    const basePath = '/pull-it-docs';
 
     function withBasePath(path) {
         if (!path || /^[a-z][a-z0-9+.-]*:/i.test(path) || path.startsWith('//') || path.startsWith('#')) {
